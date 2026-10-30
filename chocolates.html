@@ -1,120 +1,83 @@
+
 <!DOCTYPE html>
 <html lang="es">
-
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Velas de Chocolate - MICHI LUZ</title>
+    <title>Chocolates | MICHI LUZ</title>
     <link rel="stylesheet" href="css/estilos.css">
 </head>
-
 <body>
 
 <header>
-
     <div class="encabezado">
-
         <img src="img/logo1.png" alt="Logo Michi Luz" class="logo">
-
         <div class="titulo">
             <h1>MICHI LUZ</h1>
             <h2>Velas con intención</h2>
         </div>
-
     </div>
 
     <nav>
         <a href="index.html">Inicio</a>
         <a href="productos.html">Productos</a>
         <a href="quienes-somos.html">Quiénes Somos</a>
+        <a href="nuestra-historia.html">Nuestra Historia</a>
         <a href="comunicacion.html">Comunicación</a>
+        <a href="colecciones.html">Colecciones</a>
     </nav>
-
 </header>
 
-
 <main>
-
-    <section class="productos">
-
-        <h2>🍫 Velas de Chocolate</h2>
-
-        <a href="productos.html" class="boton">
-            ⬅ Volver a Productos
-        </a>
-
-        <div class="tarjetas">
-
-            <div class="tarjeta">
-
-                <div class="icono">🐾</div>
-
-                <h3>Choco Huella</h3>
-
-                <p>
-                    <strong>Forma:</strong> Huella de perro
-                </p>
-
-                <p>
-                    <strong>Sabor:</strong> Chocolate Oscuro
-                </p>
-
-                <p>
-                    <strong>Pequeño:</strong> $10.000
-                </p>
-
-                <p>
-                    <strong>Mediano:</strong> $16.000
-                </p>
-
-                <p>
-                    <strong>Grande:</strong> $22.000
-                </p>
-
-            </div>
-
-
-            <div class="tarjeta">
-
-                <div class="icono">🍪</div>
-
-                <h3>Choco Torre</h3>
-
-                <p>
-                    <strong>Forma:</strong> Torre de galletas de jengibre
-                </p>
-
-                <p>
-                    <strong>Sabor:</strong> Chocolate Blanco
-                </p>
-
-                <p>
-                    <strong>Pequeño:</strong> $11.000
-                </p>
-
-                <p>
-                    <strong>Mediano:</strong> $17.000
-                </p>
-
-                <p>
-                    <strong>Grande:</strong> $23.000
-                </p>
-
-            </div>
-
-        </div>
-
+    <section class="contenido-simple">
+        <h2>Nuestros chocolates</h2>
+        <p>Conoce nuestros detalles de chocolate. Elige el tamaño de presentación para consultar el precio correspondiente.</p>
     </section>
 
-</main>
+    <section class="productos">
+        <div class="tarjetas">
 
+            <article class="tarjeta">
+                <div class="icono">🐾</div>
+                <h3>Choco Huella</h3>
+                <p>Forma: huella de perro.</p>
+                <p>Sabor: chocolate oscuro.</p>
+
+                <label for="tamano-huella">Selecciona el tamaño:</label>
+                <select id="tamano-huella" class="selector-tamano" onchange="cambiarPrecio(this, 'precio-huella')">
+                    <option value="10000">Pequeño</option>
+                    <option value="16000">Mediano</option>
+                    <option value="22000">Grande</option>
+                </select>
+
+                <p class="precio" id="precio-huella">$10.000</p>
+            </article>
+
+            <article class="tarjeta">
+                <div class="icono">🍫</div>
+                <h3>Choco Torre</h3>
+                <p>Forma: torre de galletas de jengibre.</p>
+                <p>Sabor: chocolate blanco.</p>
+
+                <label for="tamano-torre">Selecciona el tamaño:</label>
+                <select id="tamano-torre" class="selector-tamano" onchange="cambiarPrecio(this, 'precio-torre')">
+                    <option value="11000">Pequeño</option>
+                    <option value="17000">Mediano</option>
+                    <option value="23000">Grande</option>
+                </select>
+
+                <p class="precio" id="precio-torre">$11.000</p>
+            </article>
+
+        </div>
+    </section>
+</main>
 
 <footer>
     <p>🐱 MICHI LUZ — Velas con intención 🕯️</p>
+    <p>© 2026 Michi Luz. Todos los derechos reservados.</p>
 </footer>
 
-
 <script src="js/script.js"></script>
-
 </body>
 </html>
