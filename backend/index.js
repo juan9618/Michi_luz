@@ -1,6 +1,11 @@
+const dns = require("dns");
+
+dns.setServers(["1.1.1.1", "8.8.8.8"]);
+require("dotenv").config();
+
 const express = require("express");
 const cors = require("cors");
-require("dotenv").config();
+const conectarDB = require("./config/db");
 
 const app = express();
 
@@ -8,15 +13,21 @@ const app = express();
 app.use(cors());
 app.use(express.json());
 
-// Puerto del servidor
-const PORT = process.env.PORT || 3000;
-
 // Ruta principal
 app.get("/", (req, res) => {
     res.send("Servidor de MICHI LUZ funcionando");
 });
 
-// Iniciar servidor
-app.listen(PORT, () => {
-    console.log(`Servidor MICHI LUZ escuchando en el puerto ${PORT}`);
-});
+// Puerto del servidor
+const PORT = process.env.PORT || 3000;
+
+// Conectar la base de datos e iniciar el servidor
+const iniciarServidor = async () => {
+    await conectarDB();
+
+    app.listen(PORT, () => {
+        console.log(`Servidor MICHI LUZ escuchando en el puerto ${PORT}`);
+    });
+};
+
+iniciarServidor();
