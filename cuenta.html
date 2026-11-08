@@ -1,0 +1,94 @@
+```html
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Mi cuenta - MICHI LUZ</title>
+    <link rel="stylesheet" href="css/estilos.css">
+</head>
+<body>
+
+    <header>
+        <div class="encabezado">
+            <img src="img/logo1.png" alt="Logo Michi Luz" class="logo">
+
+            <div class="titulo">
+                <h1>MICHI LUZ</h1>
+                <h2>Velas con intención</h2>
+            </div>
+        </div>
+
+        <nav>
+            <a href="index.html">Inicio</a>
+            <a href="productos.html">Productos</a>
+            <a href="quienes-somos.html">Quiénes Somos</a>
+            <a href="nuestra-historia.html">Nuestra Historia</a>
+            <a href="comunicacion.html">Comunicación</a>
+            <a href="colecciones.html">Colecciones</a>
+            <a href="cuenta.html">Mi cuenta</a>
+        </nav>
+    </header>
+
+    <main class="cuenta-contenedor">
+
+        <section class="cuenta-formulario">
+            <h2>Crear una cuenta</h2>
+            <p>Regístrate para hacer parte de la comunidad Michi Luz.</p>
+
+            <form id="formulario-registro">
+                <label for="nombre">Nombre completo</label>
+                <input type="text" id="nombre" required>
+
+                <label for="correo-registro">Correo electrónico</label>
+                <input type="email" id="correo-registro" required>
+
+                <label for="telefono">Teléfono</label>
+                <input type="tel" id="telefono">
+
+                <label for="contrasena-registro">Contraseña</label>
+                <input type="password" id="contrasena-registro" required minlength="6">
+
+                <button type="submit" class="boton">Registrarme</button>
+            </form>
+
+            <p id="mensaje-registro" class="mensaje"></p>
+        </section>
+
+        <section class="cuenta-formulario">
+            <h2>Iniciar sesión</h2>
+            <p>Si ya tienes una cuenta, ingresa tus datos.</p>
+
+            <form id="formulario-login">
+                <label for="correo-login">Correo electrónico</label>
+                <input type="email" id="correo-login" required>
+
+                <label for="contrasena-login">Contraseña</label>
+                <input type="password" id="contrasena-login" required>
+
+                <button type="submit" class="boton">Ingresar</button>
+            </form>
+
+            <p id="mensaje-login" class="mensaje"></p>
+        </section>
+
+        <section id="perfil-usuario" class="cuenta-formulario" hidden>
+            <h2>Mi perfil</h2>
+            <p id="datos-usuario"></p>
+            <button type="button" id="cerrar-sesion" class="boton">
+                Cerrar sesión
+            </button>
+        </section>
+
+    </main>
+
+    <footer>
+        <p>MICHI LUZ - Velas con intención</p>
+        <p>Gracias por ser parte de nuestra historia.</p>
+    </footer>
+
+<script src="js/javascript.js"></script>
+
+</body>
+</html>
+```

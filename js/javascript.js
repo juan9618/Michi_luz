@@ -1,4 +1,11 @@
+
 console.log("MICHI LUZ: JavaScript cargado correctamente");
+
+// ==========================================
+// CONFIGURACIÓN DE LA API
+// ==========================================
+
+const API_URL = "http://localhost:3000/api/users";
 
 // ==========================================
 // CAMBIAR PRECIO DE LOS PRODUCTOS
@@ -196,11 +203,8 @@ document.addEventListener("DOMContentLoaded", function () {
     botones.forEach(function (boton) {
 
         boton.addEventListener("click", function () {
-
             const idMascota = boton.dataset.mascota;
-
             mostrarHistoria(idMascota);
-
         });
 
     });
@@ -209,6 +213,293 @@ document.addEventListener("DOMContentLoaded", function () {
 
     if (botonCerrar) {
         botonCerrar.addEventListener("click", cerrarHistoria);
+    }
+
+});
+
+// ==========================================
+// REGISTRO DE CLIENTES
+// ==========================================
+
+const formularioRegistro = document.getElementById("formulario-registro");
+
+if (formularioRegistro) {
+
+    formularioRegistro.addEventListener("submit", async function (e) {
+
+        e.preventDefault();
+
+        const nombre = document.getElementById("nombre").value.trim();
+        const correo = document.getElementById("correo-registro").value.trim();
+        const telefono = document.getElementById("telefono").value.trim();
+        const contrasena = document.getElementById("contrasena-registro").value;
+
+        const mensaje = document.getElementById("mensaje-registro");
+
+        try {
+
+            const respuesta = await fetch(`${API_URL}/register`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    nombre,
+                    correo,
+                    telefono,
+                    contrasena
+                })
+            });
+
+            const datos = await respuesta.json();
+
+            if (!respuesta.ok) {
+                throw new Error(datos.mensaje || "No fue posible registrarse.");
+            }
+
+            mensaje.textContent = "¡Registro exitoso! Ya puedes iniciar sesión.";
+            mensaje.style.color = "green";
+
+            formularioRegistro.reset();
+
+        } catch (error) {
+
+            mensaje.textContent = error.message;
+            mensaje.style.color = "red";
+
+        }
+
+    });
+
+}
+
+// ==========================================
+// CONSULTAR PERFIL DEL CLIENTE
+// ==========================================
+
+async function mostrarPerfil() {
+
+    const token = sessionStorage.getItem("tokenMichiLuz");
+
+    if (!token) {
+        return null;
+    }
+
+    try {
+
+        const respuesta = await fetch(`${API_URL}/perfil`, {
+            headers: {
+                "Authorization": `Bearer ${token}`
+            }
+        });
+
+        const datos = await respuesta.json();
+
+        if (!respuesta.ok) {
+            throw new Error(datos.mensaje || "No fue posible consultar el perfil.");
+        }
+
+        const perfil = document.getElementById("perfil-usuario");
+        const datosUsuario = document.getElementById("datos-usuario");
+
+        if (perfil && datosUsuario) {
+
+            const nombre = document.createElement("p");
+            nombre.textContent = `Nombre: ${datos.usuario.nombre || "No registrado"}`;
+
+            const correo = document.createElement("p");
+            correo.textContent = `Correo electrónico: ${datos.usuario.correo}`;
+
+            const telefono = document.createElement("p");
+            telefono.textContent = `Teléfono: ${datos.usuario.telefono || "No registrado"}`;
+
+            const tipo = document.createElement("p");
+            tipo.textContent = `Tipo de cliente: ${datos.usuario.tipoCliente || "nuevo"}`;
+
+            datosUsuario.replaceChildren(nombre, correo, telefono, tipo);
+            perfil.hidden = false;
+        }
+
+        return datos.usuario;
+
+    } catch (error) {
+
+        sessionStorage.removeItem("tokenMichiLuz");
+        console.error("Error al consultar el perfil:", error.message);
+
+        return null;
+    }
+
+}
+
+// ==========================================
+// INICIO DE SESIÓN
+// ==========================================
+
+const formularioLogin = document.getElementById("formulario-login");
+
+if (formularioLogin) {
+
+    formularioLogin.addEventListener("submit", async function (e) {
+
+        e.preventDefault();
+
+        const correo = document.getElementById("correo-login").value.trim();
+        const contrasena = document.getElementById("contrasena-login").value;
+
+        const mensaje = document.getElementById("mensaje-login");
+
+        try {
+
+            const respuesta = await fetch(`${API_URL}/login`, {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/json"
+                },
+                body: JSON.stringify({
+                    correo,
+                    contrasena
+                })
+            });
+
+            const datos = await respuesta.json();
+
+            if (!respuesta.ok) {
+                throw new Error(datos.mensaje || "No fue posible iniciar sesión.");
+            }
+
+            sessionStorage.setItem("tokenMichiLuz", datos.token);
+
+            mensaje.textContent = "¡Bienvenido a Michi Luz!";
+            mensaje.style.color = "green";
+
+            formularioLogin.reset();
+
+            await mostrarPerfil();
+            await actualizarMenuCuenta();
+
+        } catch (error) {
+
+            mensaje.textContent = error.message;
+            mensaje.style.color = "red";
+
+        }
+
+    });
+
+}
+
+// ==========================================
+// CERRAR SESIÓN
+// ==========================================
+
+const botonCerrarSesion = document.getElementById("cerrar-sesion");
+
+if (botonCerrarSesion) {
+
+    botonCerrarSesion.addEventListener("click", function () {
+
+        sessionStorage.removeItem("tokenMichiLuz");
+
+        const perfil = document.getElementById("perfil-usuario");
+
+        if (perfil) {
+            perfil.hidden = true;
+        }
+
+        const mensaje = document.getElementById("mensaje-login");
+
+        if (mensaje) {
+            mensaje.textContent = "Has cerrado sesión correctamente.";
+            mensaje.style.color = "green";
+        }
+
+        actualizarMenuCuenta();
+
+    });
+
+}
+
+// ==========================================
+// ACTUALIZAR EL MENÚ DE MI CUENTA
+// ==========================================
+
+async function actualizarMenuCuenta() {
+
+    const menu = document.querySelector("nav");
+
+    if (!menu) {
+        return;
+    }
+
+    let enlaceCuenta = menu.querySelector('a[href="cuenta.html"]');
+
+    if (!enlaceCuenta) {
+        enlaceCuenta = document.createElement("a");
+        enlaceCuenta.href = "cuenta.html";
+        menu.appendChild(enlaceCuenta);
+    }
+
+    enlaceCuenta.textContent = "Mi cuenta";
+
+    const token = sessionStorage.getItem("tokenMichiLuz");
+
+    if (!token) {
+        enlaceCuenta.removeAttribute("title");
+        return;
+    }
+
+    try {
+
+        const respuesta = await fetch(`${API_URL}/perfil`, {
+            headers: {
+                "Authorization": `Bearer ${token}`
+            }
+        });
+
+        const datos = await respuesta.json();
+
+        if (!respuesta.ok) {
+            throw new Error(datos.mensaje || "Sesión no válida.");
+        }
+
+        enlaceCuenta.textContent = `Mi cuenta (${datos.usuario.nombre})`;
+        enlaceCuenta.title = `Sesión iniciada: ${datos.usuario.correo}`;
+
+    } catch (error) {
+
+        sessionStorage.removeItem("tokenMichiLuz");
+        enlaceCuenta.textContent = "Mi cuenta";
+        enlaceCuenta.removeAttribute("title");
+
+        console.error("No se pudo recuperar la sesión:", error.message);
+
+    }
+
+}
+
+// ==========================================
+// RECUPERAR SESIÓN AL ABRIR CUALQUIER PÁGINA
+// ==========================================
+
+document.addEventListener("DOMContentLoaded", async function () {
+
+    actualizarMenuCuenta();
+
+    if (document.getElementById("perfil-usuario")) {
+
+        const usuario = await mostrarPerfil();
+
+        if (!usuario) {
+
+            const perfil = document.getElementById("perfil-usuario");
+
+            if (perfil) {
+                perfil.hidden = true;
+            }
+
+        }
+
     }
 
 });
